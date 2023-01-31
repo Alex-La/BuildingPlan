@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+//что угодно
 
 @Service
 public class BrigadeService implements IBrigadeService {
