@@ -1,26 +1,25 @@
 package org.example.controller;
 
-import org.example.entity.Brigade;
+import org.example.entity.Task;
 import org.example.exception.EntityAlreadyExistException;
 import org.example.exception.EntityNotFoundException;
-import org.example.service.BrigadeService;
+
+import org.example.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-;
-
 @RestController
-@RequestMapping("/brigade")
-public class BrigadeController {
+@RequestMapping("/task")
+public class TaskController {
 
     @Autowired
-    BrigadeService brigadeService;
+    TaskService taskService;
 
     @GetMapping(params = {"id"})
-    public ResponseEntity brigadeById(@RequestParam Long id) {
+    public ResponseEntity taskById(@RequestParam Long id) {
         try {
-            return ResponseEntity.ok(brigadeService.getBrigade(id));
+            return ResponseEntity.ok(taskService.getTask(id));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -29,9 +28,9 @@ public class BrigadeController {
     }
 
     @GetMapping(params = {"title"})
-    public ResponseEntity brigadeByTitle(@RequestParam String title) {
+    public ResponseEntity taskByTitle(@RequestParam String title) {
         try {
-            return ResponseEntity.ok(brigadeService.getBrigade(title));
+            return ResponseEntity.ok(taskService.getTask(title));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -40,21 +39,21 @@ public class BrigadeController {
     }
 
     @GetMapping
-    public ResponseEntity allBrigades() {
+    public ResponseEntity allTasks() {
         try {
-            return ResponseEntity.ok(brigadeService.getAllBrigades());
+            return ResponseEntity.ok(taskService.getAllTasks());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body("Произошла ошибка");
         }
     }
 
 
     @PostMapping
-    public ResponseEntity createBrigade(@RequestBody Brigade brigade) {
+    public ResponseEntity createTask(@RequestBody Task task,
+                                     @RequestParam Long brigadeId) {
         try {
-            brigadeService.createBrigade(brigade);
-            return ResponseEntity.ok().body("Бригада добавлена");
+            taskService.createTask(task, brigadeId);
+            return ResponseEntity.ok().body("Задача добавлена");
         } catch (EntityAlreadyExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -63,9 +62,9 @@ public class BrigadeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteBrigade(@PathVariable Long id) {
+    public ResponseEntity deleteTask(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(brigadeService.deleteBrigade(id));
+            return ResponseEntity.ok(taskService.deleteTask(id));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -74,15 +73,14 @@ public class BrigadeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateBrigade(@RequestBody Brigade brigade, @PathVariable Long id) {
+    public ResponseEntity updateTask(@RequestBody Task task, @PathVariable Long id) {
         try {
-            brigadeService.updateBrigade(brigade, id);
-            return ResponseEntity.ok().body("Бригада обновлена");
+            taskService.updateTask(task, id);
+            return ResponseEntity.ok().body("Задача обновлена");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Произошла ошибка");
         }
     }
-
 }
