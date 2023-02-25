@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.entity.Brigade;
+import org.example.entity.BrigadeEntity;
 import org.example.exception.EntityAlreadyExistException;
 import org.example.exception.EntityNotFoundException;
 import org.example.service.BrigadeService;
@@ -51,7 +51,7 @@ public class BrigadeController {
 
 
     @PostMapping
-    public ResponseEntity createBrigade(@RequestBody Brigade brigade) {
+    public ResponseEntity createBrigade(@RequestBody BrigadeEntity brigade) {
         try {
             brigadeService.createBrigade(brigade);
             return ResponseEntity.ok().body("Бригада добавлена");
@@ -74,7 +74,7 @@ public class BrigadeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateBrigade(@RequestBody Brigade brigade, @PathVariable Long id) {
+    public ResponseEntity updateBrigade(@RequestBody BrigadeEntity brigade, @PathVariable Long id) {
         try {
             brigadeService.updateBrigade(brigade, id);
             return ResponseEntity.ok().body("Бригада обновлена");

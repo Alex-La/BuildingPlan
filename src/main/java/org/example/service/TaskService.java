@@ -1,9 +1,10 @@
 package org.example.service;
 
-import org.example.entity.Brigade;
-import org.example.entity.Task;
+import org.example.entity.BrigadeEntity;
+import org.example.entity.TaskEntity;
 import org.example.exception.EntityAlreadyExistException;
 import org.example.exception.EntityNotFoundException;
+import org.example.model.Task;
 import org.example.repository.IBrigadeRepo;
 import org.example.repository.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,41 +21,42 @@ public class TaskService implements ITaskService {
     private IBrigadeRepo brigadeRepo;
 
     @Override
-    public List<Task> getAllTasks() {
-        return (List<Task>) taskRepo.findAll();
+    public List<TaskEntity> getAllTasks() {
+        return (List<TaskEntity>) taskRepo.findAll();
     }
 
     @Override
-    public Task createTask(Task task, Long brigadeId) throws EntityAlreadyExistException {
+    public Task createTask(TaskEntity task, Long brigadeId) throws EntityAlreadyExistException {
         if (taskRepo.findByTitle(task.getTitle()).isPresent()) {
             throw new EntityAlreadyExistException("Задача с таким именем уже существует");
         }
-        Brigade brigade = brigadeRepo.findById(brigadeId).get();
+        BrigadeEntity brigade = brigadeRepo.findById(brigadeId).get();
         task.setBrigade(brigade);
-        return taskRepo.save(task);
+        return Task.toModel(taskRepo.save(task));
     }
 
     @Override
     public Task getTask(Long id) throws EntityNotFoundException {
-        return taskRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
+        return Task.toModel
+                (taskRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Задача не найдена")));
 
     }
 
     @Override
     public Task getTask(String title) throws EntityNotFoundException {
-        return taskRepo.findByTitle(title).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
+        return Task.toModel(taskRepo.findByTitle(title).orElseThrow(() -> new EntityNotFoundException("Задача не найдена")));
     }
 
     @Override
     public String deleteTask(Long id) throws EntityNotFoundException {
-        Task task = taskRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
+        TaskEntity task = taskRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
         String nameTask = task.getTitle();
         taskRepo.deleteById(id);
         return "Задача " + nameTask + " удалена.";
     }
 
     @Override
-    public Task updateTask(Task task, Long id) throws EntityNotFoundException {
+    public TaskEntity updateTask(TaskEntity task, Long id) throws EntityNotFoundException {
 
         return taskRepo.findById(id).map(oldTask -> {
             oldTask.setTitle(task.getTitle());

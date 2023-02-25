@@ -1,16 +1,17 @@
 package org.example.service;
 
-import org.example.entity.Task;
+import org.example.entity.TaskEntity;
 import org.example.exception.EntityAlreadyExistException;
 import org.example.exception.EntityNotFoundException;
+import org.example.model.Task;
 
 import java.util.List;
 
 public interface ITaskService {
 
-    List<Task> getAllTasks();
+    List<TaskEntity> getAllTasks();
 
-    Task createTask(Task task, Long brigadeId) throws EntityAlreadyExistException;
+    Task createTask(TaskEntity task, Long brigadeId) throws EntityAlreadyExistException;
 
     Task getTask(Long id) throws EntityNotFoundException;
 
@@ -18,5 +19,5 @@ public interface ITaskService {
 
     String deleteTask(Long id) throws EntityNotFoundException;
 
-    Task updateTask(Task task, Long id) throws EntityNotFoundException;
+    TaskEntity updateTask(TaskEntity task, Long id) throws EntityNotFoundException;
 }

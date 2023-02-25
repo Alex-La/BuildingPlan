@@ -2,14 +2,12 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "brigades")
-public class Brigade {
+public class BrigadeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,27 +15,17 @@ public class Brigade {
     private String title;
     private String description;
     @OneToMany(mappedBy = "brigade", cascade = CascadeType.ALL)
-    private List<Task> taskIds = new ArrayList<>();
+    private List<TaskEntity> taskIds = new ArrayList<>();
 
-    /*public void addTask(Task task) {
-        taskIds.add(task);
-        task.setBrigade(this);
+    public BrigadeEntity() {
     }
 
-    public void removeTask(Task task) {
-        taskIds.remove(task);
-        task.setBrigade(null);
-    }*/
-
-    public Brigade() {
-    }
-
-    public Brigade(String title, String description) {
+    public BrigadeEntity(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-    public Brigade(String title, String description, List<Task> taskIds) {
+    public BrigadeEntity(String title, String description, List<TaskEntity> taskIds) {
         this.title = title;
         this.description = description;
         this.taskIds = taskIds;
@@ -67,11 +55,11 @@ public class Brigade {
         this.description = description;
     }
 
-    public List<Task> getTaskIds() {
+    public List<TaskEntity> getTaskIds() {
         return taskIds;
     }
 
-    public void setTaskIds(List<Task> taskIds) {
+    public void setTaskIds(List<TaskEntity> taskIds) {
         this.taskIds = taskIds;
     }
 }

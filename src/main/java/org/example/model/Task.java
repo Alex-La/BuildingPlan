@@ -1,34 +1,27 @@
-package org.example.entity;
+package org.example.model;
 
-import jakarta.persistence.*;
+import org.example.entity.TaskEntity;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "tasks")
 public class Task {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
     private boolean completed;
     private Date date;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brigadeId")
-    private Brigade brigade;
 
-
-    public Task() {
+    public static Task toModel(TaskEntity taskEntity) {
+        Task model = new Task();
+        model.setId(taskEntity.getId());
+        model.setTitle(taskEntity.getTitle());
+        model.setDescription(taskEntity.getDescription());
+        model.setCompleted(taskEntity.isCompleted());
+        model.setDate(taskEntity.getDate());
+        return model;
     }
 
-    public Task (String title, String description, boolean completed, Date date) {
-        this.title = title;
-        this.description = description;
-        this.completed = completed;
-        this.date = date;
-
+    public Task() {
     }
 
     public Long getId() {
@@ -69,13 +62,5 @@ public class Task {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public Brigade getBrigade() {
-        return brigade;
-    }
-
-    public void setBrigade(Brigade brigade) {
-        this.brigade = brigade;
     }
 }

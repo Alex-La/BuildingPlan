@@ -1,8 +1,9 @@
 package org.example.service;
 
-import org.example.entity.Brigade;
+import org.example.entity.BrigadeEntity;
 import org.example.exception.EntityAlreadyExistException;
 import org.example.exception.EntityNotFoundException;
+import org.example.model.Brigade;
 import org.example.repository.IBrigadeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,40 +19,40 @@ public class BrigadeService implements IBrigadeService {
 
     @Override
     public List<Brigade> getAllBrigades() {
-        return (List<Brigade>) brigadeRepo.findAll();
+        return (List<Brigade>) Brigade.toModel((BrigadeEntity) brigadeRepo.findAll());
     }
 
     @Override
-    public Brigade createBrigade(Brigade brigade) throws EntityAlreadyExistException {
+    public Brigade createBrigade(BrigadeEntity brigade) throws EntityAlreadyExistException {
         if (brigadeRepo.findByTitle(brigade.getTitle()) != null) {
             throw new EntityAlreadyExistException("Бригада с таким именем уже существует");
         }
-        return brigadeRepo.save(brigade);
+        return Brigade.toModel(brigadeRepo.save(brigade));
     }
 
     @Override
     public Brigade getBrigade(Long id) throws EntityNotFoundException {
-        Brigade brigade = brigadeRepo.findById(id).get();
+        BrigadeEntity brigade = brigadeRepo.findById(id).get();
         if (brigade == null) {
             throw new EntityNotFoundException("Бригада не найдена");
         } else {
-            return brigade;
+            return Brigade.toModel(brigade);
         }
     }
 
     @Override
     public Brigade getBrigade(String title) throws EntityNotFoundException {
-        Brigade brigade = brigadeRepo.findByTitle(title);
+        BrigadeEntity brigade = brigadeRepo.findByTitle(title);
         if (brigade == null) {
             throw new EntityNotFoundException("Бригада не найдена");
         } else {
-            return brigade;
+            return Brigade.toModel(brigade);
         }
     }
 
     @Override
     public String deleteBrigade(Long id) throws EntityNotFoundException {
-        Brigade brigade = brigadeRepo.findById(id).get();
+        BrigadeEntity brigade = brigadeRepo.findById(id).get();
         String nameBrigade = brigade.getTitle();
         if (brigade == null) {
             throw new EntityNotFoundException("Бригада не найдена");
@@ -62,7 +63,7 @@ public class BrigadeService implements IBrigadeService {
     }
 
     @Override
-    public Brigade updateBrigade(Brigade brigade, Long id) throws EntityNotFoundException {
+    public BrigadeEntity updateBrigade(BrigadeEntity brigade, Long id) throws EntityNotFoundException {
 
         return brigadeRepo.findById(id)
                 .map(oldBrigade -> {

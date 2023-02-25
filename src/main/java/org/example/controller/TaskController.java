@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.entity.Task;
+import org.example.entity.TaskEntity;
 import org.example.exception.EntityAlreadyExistException;
 import org.example.exception.EntityNotFoundException;
 
@@ -49,7 +49,7 @@ public class TaskController {
 
 
     @PostMapping
-    public ResponseEntity createTask(@RequestBody Task task,
+    public ResponseEntity createTask(@RequestBody TaskEntity task,
                                      @RequestParam Long brigadeId) {
         try {
             taskService.createTask(task, brigadeId);
@@ -73,7 +73,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateTask(@RequestBody Task task, @PathVariable Long id) {
+    public ResponseEntity updateTask(@RequestBody TaskEntity task, @PathVariable Long id) {
         try {
             taskService.updateTask(task, id);
             return ResponseEntity.ok().body("Задача обновлена");
